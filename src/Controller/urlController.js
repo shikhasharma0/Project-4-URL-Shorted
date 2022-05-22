@@ -27,7 +27,7 @@ const shortenURL = async function(req,res)
 
             return res.status(400).send({status : false, message : "Please provide data or provide only one longurl"});
 
-        if(req.body.longUrl==undefined&&typeof(req.body.longUrl)!='string')
+        if(req.body.longUrl.trim().length==0||typeof(req.body.longUrl)!='string'||req.body.longUrl==undefined)
 
             return res.status(400).send({status : false, message : "originalUrl is required and should be  a string."});
 
@@ -38,7 +38,8 @@ const shortenURL = async function(req,res)
         const longUrl = req.body.longUrl;
 
         let cachedUrlData = JSON.parse(await GET_ASYNC(`${longUrl}`));
-
+       
+       
         if(cachedUrlData)
         {
             return res.status(200).send({status : true, message : "cache hit", data : { longUrl : cachedUrlData.longUrl, shortUrl : cachedUrlData.shortUrl, urlCode : cachedUrlData.urlCode }});
